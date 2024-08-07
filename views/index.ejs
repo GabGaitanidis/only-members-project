@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Members Only</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+    <meta name="msapplication-TileColor" content="#da532c" />
+    <meta name="theme-color" content="#ffffff" />
+  </head>
+  <body>
+    <% if (user) { %>
+    <nav>
+      <div class="header">
+        <h1>Only Members</h1>
+        <img src="/key.png" alt="key icon" />
+      </div>
+      <div class="nav-right">
+        <a href="/log-out">Log-out</a>
+        <% if (user.status === 'admin') { %>
+        <a href="/">You are Admin</a>
+        <% } else { %>
+        <a href="/admin">Admin</a>
+        <% } %>
+        <div class="flex mrleft">
+          <img src="/user.png" alt="user icon" />
+          <h2><%= user.username %></h2>
+        </div>
+      </div>
+    </nav>
+    <% if (messages && messages.length > 0) { %>
+    <div class="container">
+      <div class="messages">
+        <% messages.forEach(mes => { %>
+        <div class="message">
+          <div class="flex">
+            <img src="/user.png" alt="user icon" /><%= mes.username %>
+          </div>
+          <br />
+          <p class="p"><%= mes.txt %></p>
+          <% if (user.status === 'admin') { %>
+          <form class="del" action="/message/<%= mes.id %>" method="post">
+            <button class="delbtn" type="submit">Delete</button>
+          </form>
+          <% } else { %>
+          <div></div>
+          <% } %>
+        </div>
+        <% }); %>
+      </div>
+      <div class="sendMessageDiv">
+        <a href="/send-message" class="sendMessage">Send message</a>
+      </div>
+    </div>
+    <% } else { %>
+    <p>No messages.</p>
+    <a href="/send-message">Send message</a>
+    <% } %> <% } else { %>
+    <nav>
+      <div class="header">
+        <h1>Only Members</h1>
+        <img src="/key.png" alt="key icon" />
+      </div>
+      <div class="nav-right">
+        <a href="/log-in">Log-in</a>
+        <div class="flex">
+          <img src="/user.png" alt="user icon" />
+          <h2>Guest</h2>
+        </div>
+      </div>
+    </nav>
+    <% if (messages && messages.length > 0) { %>
+    <div class="container">
+      <div class="messages">
+        <% messages.forEach(mes => { %>
+        <div class="message">
+          <div class="flex"><img src="/user.png" alt="user icon" /> ???</div>
+          <br />
+          <p class="p"><%= mes.txt %></p>
+          <% if (mes.status === 'admin') { %>
+          <div class="del">
+            <button class="delbtn">Delete</button>
+          </div>
+          <% } %>
+        </div>
+        <% }); %>
+      </div>
+      <p class="center">Log-in to send a message!</p>
+    </div>
+    <% } else { %>
+    <p>No messages.</p>
+    <a href="/send-message">Send message</a>
+    <% } %> <% } %>
+  </body>
+</html>
