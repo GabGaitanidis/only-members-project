@@ -83,14 +83,25 @@ app.post("/sign-up", controls.signUp);
 app.get("/log-in", (req, res) => {
   res.render("login");
 });
+
 app.post("/message/:id", controls.deleteMessage);
-app.post(
-  "/log-in",
-  passport.authenticate("local", {
-    successRedirect: "/",
-    failureRedirect: "/log-in",
-  })
-);
+app.post("/log-in", (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
+      if (err) {
+          return next(err); 
+      }
+      if (!user) {
+          return res.status(401).json({ message: info.message });
+      }
+      req.logIn(user, (err) => {
+          if (err) {
+              return next(err);
+          }
+          return res.json({ message: "Login successful!" }); 
+      });
+  })(req, res, next);
+});
+
 app.get("/admin", (req, res) => {
   res.render("admin");
 });

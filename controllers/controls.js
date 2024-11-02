@@ -51,5 +51,6 @@ module.exports = {
   displayForm,
   addMessage,
   admin,
+  s,
   deleteMessage,
 };
